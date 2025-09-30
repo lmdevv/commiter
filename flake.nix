@@ -6,8 +6,14 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
       in
@@ -16,16 +22,19 @@
           pname = "commiter";
           version = "0.1.0";
           src = ./.;
-          vendorHash = null;  # Run `nix build` first, then replace with the suggested hash
+          vendorHash = null;
           meta = with pkgs.lib; {
             description = "CLI tool for generating AI-powered commit messages";
             license = licenses.mit;
-            maintainers = [ "lmdevv" ]; 
+            maintainers = [ "lmdevv" ];
           };
         };
 
         devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [ go git  ];
+          buildInputs = with pkgs; [
+            go
+            git
+          ];
         };
       }
     );
