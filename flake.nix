@@ -20,12 +20,12 @@
           meta = with pkgs.lib; {
             description = "CLI tool for generating AI-powered commit messages";
             license = licenses.mit;
-            maintainers = [ ];  # Add your name if desired
+            maintainers = [ "lmdevv" ]; 
           };
         };
 
         devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [ go git ];
+          buildInputs = with pkgs; [ go git  ];
         };
       }
     );
