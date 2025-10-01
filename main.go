@@ -67,6 +67,72 @@ func saveAPIKey(key string) {
 	fmt.Println("API key saved successfully.")
 }
 
+func loadSimplePrompt() string {
+	configDir := getConfigDir()
+	promptFile := filepath.Join(configDir, "simple_prompt")
+	data, err := os.ReadFile(promptFile)
+	if err != nil {
+		// Return default prompt if file doesn't exist
+		return "Generate a short, concise commit message based on the provided Git differences below. Output only the commit message as a single line in lower case. Do not include any additional text, quotes, or explanations.\n\n---\nBEGIN GIT DIFF:\n"
+	}
+	return strings.TrimSpace(string(data))
+}
+
+func loadRegularPrompt() string {
+	configDir := getConfigDir()
+	promptFile := filepath.Join(configDir, "regular_prompt")
+	data, err := os.ReadFile(promptFile)
+	if err != nil {
+		// Return default prompt if file doesn't exist
+		return "Generate a short, concise commit message based on the provided Git differences below.\nProvide up to 3 additional description options. Output in this exact format:\n\nfeat: commit message\n- desc option 1\n- desc option 2\n- optional desc option 3\n\nDo not include any other text.\n\n---\nBEGIN GIT DIFF:\n"
+	}
+	return strings.TrimSpace(string(data))
+}
+
+func saveSimplePrompt(prompt string) {
+	configDir := getConfigDir()
+	os.MkdirAll(configDir, 0755)
+	promptFile := filepath.Join(configDir, "simple_prompt")
+	err := os.WriteFile(promptFile, []byte(prompt), 0644)
+	if err != nil {
+		fmt.Println("Error saving simple prompt:", err)
+		os.Exit(1)
+	}
+}
+
+func saveRegularPrompt(prompt string) {
+	configDir := getConfigDir()
+	os.MkdirAll(configDir, 0755)
+	promptFile := filepath.Join(configDir, "regular_prompt")
+	err := os.WriteFile(promptFile, []byte(prompt), 0644)
+	if err != nil {
+		fmt.Println("Error saving regular prompt:", err)
+		os.Exit(1)
+	}
+}
+
+func loadModel() string {
+	configDir := getConfigDir()
+	modelFile := filepath.Join(configDir, "model")
+	data, err := os.ReadFile(modelFile)
+	if err != nil {
+		// Return default model if file doesn't exist
+		return "mistralai/ministral-3b"
+	}
+	return strings.TrimSpace(string(data))
+}
+
+func saveModel(model string) {
+	configDir := getConfigDir()
+	os.MkdirAll(configDir, 0755)
+	modelFile := filepath.Join(configDir, "model")
+	err := os.WriteFile(modelFile, []byte(model), 0644)
+	if err != nil {
+		fmt.Println("Error saving model:", err)
+		os.Exit(1)
+	}
+}
+
 func main() {
 	initFlag := flag.Bool("init", false, "Initialize with OpenRouter API key")
 	simple := flag.Bool("simple", false, "Generate simple one-liner commit message")
@@ -82,6 +148,12 @@ func main() {
 			os.Exit(1)
 		}
 		saveAPIKey(key)
+		// Save default prompts
+		saveSimplePrompt("Generate a short, concise commit message based on the provided Git differences below. Output only the commit message as a single line in lower case. Do not include any additional text, quotes, or explanations.\n\n---\nBEGIN GIT DIFF:\n")
+		saveRegularPrompt("Generate a short, concise commit message based on the provided Git differences below.\nProvide up to 3 additional description options. Output in this exact format:\n\nfeat: commit message\n- desc option 1\n- desc option 2\n- optional desc option 3\n\nDo not include any other text.\n\n---\nBEGIN GIT DIFF:\n")
+		// Save default model
+		saveModel("mistralai/ministral-3b")
+		fmt.Println("Default prompts and model saved successfully.")
 		return
 	}
 
@@ -102,14 +174,14 @@ func main() {
 	// Construct prompt
 	var prompt string
 	if *simple {
-		prompt = "Generate a short, concise commit message based on the provided Git differences below. Output only the commit message as a single line in lower case. Do not include any additional text, quotes, or explanations.\n\n---\nBEGIN GIT DIFF:\n" + string(diff)
+		prompt = loadSimplePrompt() + string(diff)
 	} else {
-		prompt = "Generate a short, concise commit message based on the provided Git differences below.\nProvide up to 3 additional description options. Output in this exact format:\n\nfeat: commit message\n- desc option 1\n- desc option 2\n- optional desc option 3\n\nDo not include any other text.\n\n---\nBEGIN GIT DIFF:\n" + string(diff)
+		prompt = loadRegularPrompt() + string(diff)
 	}
 
 	// Call OpenRouter API
 	reqBody := OpenRouterRequest{
-		Model:    "mistralai/ministral-3b",
+		Model:    loadModel(),
 		Messages: []Message{{Role: "user", Content: prompt}},
 	}
 	jsonData, _ := json.Marshal(reqBody)
