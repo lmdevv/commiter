@@ -102,7 +102,7 @@ func main() {
 	// Construct prompt
 	var prompt string
 	if *simple {
-		prompt = "Generate a short, concise commit message based on the provided Git differences below. Output only the commit message as a single line in lower case, starting with fix:, feat:, chore:, or nothing. Do not include any additional text, quotes, or explanations.\n\n---\nBEGIN GIT DIFF:\n" + string(diff)
+		prompt = "Generate a short, concise commit message based on the provided Git differences below. Output only the commit message as a single line in lower case. Do not include any additional text, quotes, or explanations.\n\n---\nBEGIN GIT DIFF:\n" + string(diff)
 	} else {
 		prompt = "Generate a short, concise commit message based on the provided Git differences below.\nProvide up to 3 additional description options. Output in this exact format:\n\nfeat: commit message\n- desc option 1\n- desc option 2\n- optional desc option 3\n\nDo not include any other text.\n\n---\nBEGIN GIT DIFF:\n" + string(diff)
 	}
