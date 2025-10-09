@@ -43,8 +43,9 @@ Stage your changes with `git add`, then run:
 
 ```bash
 commiter  # Generates detailed commit message with options
-commiter --simple  # Generates simple one-liner
+commiter --simple  # Generates simple one-liner and auto-commits
 ```
 
 The generated message will be printed and copied to your clipboard.
+In simple mode, it will automatically commit with the generated message.
 

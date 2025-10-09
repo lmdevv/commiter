@@ -235,4 +235,15 @@ func main() {
 	if err != nil {
 		fmt.Println("Error copying to clipboard:", err)
 	}
+
+	// Auto-commit if simple mode
+	if *simple {
+		commitCmd := exec.Command("git", "commit", "-m", strings.TrimSpace(output))
+		err = commitCmd.Run()
+		if err != nil {
+			fmt.Println("Error committing:", err)
+			os.Exit(1)
+		}
+		fmt.Println("Committed successfully.")
+	}
 }
