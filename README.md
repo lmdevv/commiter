@@ -46,6 +46,5 @@ commiter  # Generates detailed commit message with options
 commiter --simple  # Generates simple one-liner and auto-commits
 ```
 
-The generated message will be printed and copied to your clipboard.
-In simple mode, it will automatically commit with the generated message.
-
+The generated message will be printed and copied to your clipboard. In simple
+mode, it will automatically commit with the generated message.
