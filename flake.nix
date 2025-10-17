@@ -23,7 +23,7 @@
            version = "0.2.2";
             src = ./.;
             proxyVendor = false;
-            vendorHash = "sha256-NsT/LCD3gFW60oGkYSr2EsapJGmQkMXsUImu+neO1zg=";
+            vendorHash = null;
            meta = with pkgs.lib; {
              description = "CLI tool for generating AI-powered commit messages";
              license = licenses.mit;
