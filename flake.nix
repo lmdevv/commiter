@@ -24,7 +24,6 @@
             src = ./.;
             proxyVendor = false;
             vendorHash = "sha256-NsT/LCD3gFW60oGkYSr2EsapJGmQkMXsUImu+neO1zg=";
-            GOFLAGS = [ "-mod=vendor" ];
            meta = with pkgs.lib; {
              description = "CLI tool for generating AI-powered commit messages";
              license = licenses.mit;
