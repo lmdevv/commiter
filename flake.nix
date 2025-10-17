@@ -19,16 +19,18 @@
       in
       {
         packages.default = pkgs.buildGoModule {
-          pname = "commiter";
-          version = "0.2.2";
-          src = ./.;
-          vendorHash = null;
-          meta = with pkgs.lib; {
-            description = "CLI tool for generating AI-powered commit messages";
-            license = licenses.mit;
-            maintainers = [ "lmdevv" ];
-          };
-        };
+           pname = "commiter";
+           version = "0.2.2";
+            src = ./.;
+            proxyVendor = false;
+            vendorHash = "sha256-NsT/LCD3gFW60oGkYSr2EsapJGmQkMXsUImu+neO1zg=";
+            GOFLAGS = [ "-mod=vendor" ];
+           meta = with pkgs.lib; {
+             description = "CLI tool for generating AI-powered commit messages";
+             license = licenses.mit;
+             maintainers = [ "lmdevv" ];
+           };
+         };
 
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
