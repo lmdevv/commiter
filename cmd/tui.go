@@ -181,14 +181,14 @@ func generateCommitMessage(simple bool) string {
 func generateStashMessage() string {
 	apiKey := loadAPIKey()
 
-	// Get git diff
-	cmd := exec.Command("git", "diff")
+	// Get git diff --staged
+	cmd := exec.Command("git", "diff", "--staged")
 	diff, err := cmd.Output()
 	if err != nil {
 		return fmt.Sprintf("Error getting git diff: %v", err)
 	}
 	if len(diff) == 0 {
-		return "No changes to stash"
+		return "No staged changes to stash"
 	}
 
 	// Construct prompt for stash message
@@ -270,13 +270,13 @@ func performCommit(message string, simple bool) string {
 }
 
 func performStash(message string) string {
-	// Stash with message
-	stashCmd := exec.Command("git", "stash", "push", "-m", message)
+	// Stash staged changes with message
+	stashCmd := exec.Command("git", "stash", "push", "--staged", "-m", message)
 	err := stashCmd.Run()
 	if err != nil {
 		return fmt.Sprintf("Error stashing: %v", err)
 	}
-	return fmt.Sprintf("Stashed with message: %s", message)
+	return fmt.Sprintf("Stashed staged changes with message: %s", message)
 }
 
 var keys = struct {

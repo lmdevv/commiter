@@ -19,8 +19,8 @@
       in
       {
         packages.default = pkgs.buildGoModule {
-           pname = "commiter";
-           version = "0.2.2";
+           pname = "committer";
+           version = "0.3.1";
             src = ./.;
             proxyVendor = false;
             vendorHash = null;
